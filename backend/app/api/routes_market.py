@@ -1,11 +1,13 @@
 from __future__ import annotations
 
+from __future__ import annotations
+
+from datetime import datetime
 from typing import Any
 
 import pandas as pd
 from fastapi import APIRouter
-from pydantic import BaseModel, Field
-from pydantic import model_validator
+from pydantic import BaseModel, Field, field_validator, model_validator
 
 from backend.app.skills.market_analysis import (
     detect_momentum,
@@ -18,7 +20,10 @@ router = APIRouter(prefix="/api/v1/market", tags=["market"])
 
 
 class OHLCVCandle(BaseModel):
-    timestamp: str | int | None = Field(None, description="Optional candle timestamp.")
+    timestamp: datetime | str | int | None = Field(
+        None,
+        description="Optional candle timestamp. Can be an ISO 8601 string, integer epoch, or datetime.",
+    )
     open: float = Field(..., ge=0.0, description="Open price for the candle.")
     high: float = Field(..., ge=0.0, description="High price for the candle.")
     low: float = Field(..., ge=0.0, description="Low price for the candle.")
@@ -42,7 +47,25 @@ class OHLCVCandle(BaseModel):
 
 
 class MarketOHLCVRequest(BaseModel):
-    ohlcv: list[OHLCVCandle] = Field(..., description="List of validated OHLCV candle records.")
+    ohlcv: list[OHLCVCandle] = Field(
+        ..., min_length=6, description="List of validated OHLCV candle records. Minimum 6 candles for meaningful analysis.")
+
+    @field_validator("ohlcv", mode="before")
+    @classmethod
+    def validate_minimum_candles(cls, values: Any) -> Any:
+        if not isinstance(values, list):
+            raise TypeError("ohlcv must be a list of candle objects")
+        if len(values) < 6:
+            raise ValueError("ohlcv list must contain at least 6 candle records")
+        return values
+
+    @model_validator(mode="after")
+    @classmethod
+    def validate_timestamps(cls, values: "MarketOHLCVRequest") -> "MarketOHLCVRequest":
+        timestamps = [item.timestamp for item in values.ohlcv if item.timestamp is not None]
+        if len(timestamps) != len(set(timestamps)):
+            raise ValueError("ohlcv timestamps must be unique when provided")
+        return values
 
 
 def _prepare_ohlcv(payload: MarketOHLCVRequest) -> pd.DataFrame:
@@ -77,3 +100,8 @@ def detect_market_volatility(payload: MarketOHLCVRequest):
     ohlcv = _prepare_ohlcv(payload)
     result = detect_volatility(ohlcv)
     return {"volatility_analysis": result}
+
+
+@router.post("/validate")
+def validate_market_ohlcv(payload: MarketOHLCVRequest):
+    return {"valid": True, "total_candles": len(payload.ohlcv)}
