@@ -66,6 +66,11 @@ class NoTradeGuardAgent:
             action = "PAUSE_NEW_ENTRY"
             reasons.append("NO_TRADE_CHAOS")
 
+        if self._is_drawdown_exceeded(state):
+            allowed = False
+            action = "STOP"
+            reasons.append("NO_TRADE_DRAWDOWN")
+
         if self._is_loss_streak(state):
             allowed = False
             action = "PAUSE_NEW_ENTRY"
@@ -133,6 +138,9 @@ class NoTradeGuardAgent:
 
     def _is_market_chaos(self, market_state: dict[str, Any]) -> bool:
         return bool(market_state.get("market_chaos", False))
+
+    def _is_drawdown_exceeded(self, state: Any) -> bool:
+        return float(getattr(state, "drawdown_pct", 0.0)) > 15.0
 
     def _is_loss_streak(self, state: Any) -> bool:
         return getattr(state, "consecutive_loss", 0) >= getattr(self.settings, "max_consecutive_loss", 5)

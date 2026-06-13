@@ -42,3 +42,25 @@ def test_no_trade_block_on_low_confidence():
 
     assert not decision.allowed
     assert "NO_TRADE_LOW_CONFIDENCE" in decision.reasons
+
+
+def test_no_trade_block_on_drawdown_exceeded():
+    state = RobotState(
+        robot_id="r3",
+        symbol="EURUSD",
+        broker="mock",
+        magic_number=3,
+        fsm_state="BOOT",
+        drawdown_pct=16.0,
+    )
+    market_state = {
+        "tick": type("T", (), {"timestamp": datetime(2026, 1, 1, 1, 0, tzinfo=timezone.utc), "spread": 0.00002})(),
+        "confidence": 0.8,
+        "regime": "REGIME_UPTREND",
+    }
+
+    decision = NoTradeGuardAgent(settings=type("S", (), {"max_spread_points": 25.0, "tick_size": 0.00001, "max_consecutive_loss": 5})()).evaluate(state, market_state)
+
+    assert not decision.allowed
+    assert decision.action == "STOP"
+    assert "NO_TRADE_DRAWDOWN" in decision.reasons
