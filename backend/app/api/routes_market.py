@@ -62,23 +62,54 @@ class MarketOHLCVRequest(BaseModel):
     @model_validator(mode="after")
     @classmethod
     def validate_timestamps(cls, values: "MarketOHLCVRequest") -> "MarketOHLCVRequest":
-        timestamps = [item.timestamp for item in values.ohlcv if item.timestamp is not None]
-        if not timestamps:
+        # Collect indices and original timestamp values
+        indexed = [(i, item) for i, item in enumerate(values.ohlcv) if item.timestamp is not None]
+        if not indexed:
             return values
 
-        # use pandas to parse timestamps robustly (supports int epoch, iso strings, datetimes)
-        try:
-            parsed = pd.to_datetime(timestamps, utc=True, errors="raise")
-        except Exception as exc:  # pragma: no cover - parsing errors are rare in tests
-            raise ValueError(f"unable to parse ohlcv timestamps: {exc}")
+        parsed_ns = []
+        parsed_ts = []
+        for idx, item in indexed:
+            ts = item.timestamp
+            try:
+                # integers/floats: treat as epoch seconds (UTC)
+                if isinstance(ts, (int, float)):
+                    p = pd.to_datetime(int(ts), unit="s", utc=True)
+                elif isinstance(ts, str):
+                    # parse preserving tz info; require tz-aware strings
+                    p = pd.to_datetime(ts, utc=False, errors="raise")
+                    if p.tzinfo is None:
+                        raise ValueError("string timestamps must include timezone information")
+                    p = p.tz_convert("UTC")
+                elif isinstance(ts, datetime):
+                    if ts.tzinfo is None:
+                        raise ValueError("datetime timestamps must be timezone-aware")
+                    p = pd.Timestamp(ts).tz_convert("UTC")
+                else:
+                    # fallback: try pandas generic parse and require tz
+                    p = pd.to_datetime(ts, utc=False, errors="raise")
+                    if p.tzinfo is None:
+                        raise ValueError("timestamps must be timezone-aware or epoch integers")
+                    p = p.tz_convert("UTC")
+            except Exception as exc:  # pragma: no cover - parsing errors are rare in tests
+                raise ValueError(f"unable to parse ohlcv timestamp at index {idx}: {exc}")
 
-        # uniqueness check
-        if not parsed.is_unique:
+            parsed_ts.append(p)
+            parsed_ns.append(int(p.value))
+
+        # uniqueness check based on nanosecond epoch
+        if len(set(parsed_ns)) != len(parsed_ns):
             raise ValueError("ohlcv timestamps must be unique when provided")
 
         # monotonic increasing check
-        if not parsed.is_monotonic_increasing:
-            raise ValueError("ohlcv timestamps must be monotonic increasing")
+        for a, b in zip(parsed_ns, parsed_ns[1:]):
+            if a >= b:
+                raise ValueError("ohlcv timestamps must be monotonic increasing")
+
+        # normalize timestamps back into the model as ISO UTC strings
+        for (idx, item), p in zip(indexed, parsed_ts):
+            # ISO format with Z indicator for UTC
+            item.timestamp = p.tz_convert("UTC").isoformat()
 
         return values
 
@@ -119,4 +150,5 @@ def detect_market_volatility(payload: MarketOHLCVRequest):
 
 @router.post("/validate")
 def validate_market_ohlcv(payload: MarketOHLCVRequest):
-    return {"valid": True, "total_candles": len(payload.ohlcv)}
+    normalized = [item.timestamp for item in payload.ohlcv if item.timestamp is not None]
+    return {"valid": True, "total_candles": len(payload.ohlcv), "normalized_timestamps": normalized}

@@ -93,3 +93,32 @@ def test_validate_market_ohlcv_monotonic_timestamps_rejects():
 
     response = client.post("/api/v1/market/validate", json={"ohlcv": ohlcv})
     assert response.status_code == 422
+
+
+def test_validate_market_ohlcv_rejects_naive_string_timestamp():
+    # ISO strings without timezone should be rejected
+    ohlcv = []
+    for i, price in enumerate([1.0 + i * 0.001 for i in range(6)]):
+        candle = build_ohlcv([price])[0]
+        candle["timestamp"] = f"2023-01-01T00:00:0{i}"
+        ohlcv.append(candle)
+
+    response = client.post("/api/v1/market/validate", json={"ohlcv": ohlcv})
+    assert response.status_code == 422
+
+
+def test_validate_market_ohlcv_accepts_timezone_aware_strings():
+    # ISO strings with timezone should be accepted and normalized to UTC
+    ohlcv = []
+    for i, price in enumerate([1.0 + i * 0.001 for i in range(6)]):
+        candle = build_ohlcv([price])[0]
+        candle["timestamp"] = f"2023-01-01T00:00:0{i}+07:00"
+        ohlcv.append(candle)
+
+    response = client.post("/api/v1/market/validate", json={"ohlcv": ohlcv})
+    assert response.status_code == 200
+    payload = response.json()
+    assert payload["valid"] is True
+    assert "normalized_timestamps" in payload
+    # normalized timestamps should end with Z (UTC)
+    assert all(ts.endswith("+00:00") or ts.endswith("Z") for ts in payload["normalized_timestamps"])
