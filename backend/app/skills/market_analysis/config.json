@@ -1,0 +1,10 @@
+{
+  "name": "market-analysis",
+  "version": "0.2.0",
+  "author": "",
+  "description": "Analyze market regime, structure, momentum, volatility, and trend strength.",
+  "interface": {
+    "input": "market_state",
+    "output": ["regime", "structure", "momentum", "volatility", "strength"]
+  }
+}

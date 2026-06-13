@@ -1,0 +1,6 @@
+{
+  "max_portfolio_risk": 3,
+  "max_symbol_risk": 1,
+  "max_correlation_score": 0.8,
+  "max_margin_usage": 50
+}

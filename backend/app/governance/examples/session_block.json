@@ -1,0 +1,8 @@
+{
+  "signal": "buy",
+  "skill": "market_analysis",
+  "strategy": "pullback",
+  "risk": {"risk": 0.5},
+  "capital": {"drawdown": 2, "margin_usage": 20, "free_margin": 80},
+  "session": {"asian_session": false, "london_session": false, "new_york_session": false}
+}

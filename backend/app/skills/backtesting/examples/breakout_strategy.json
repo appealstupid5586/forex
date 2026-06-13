@@ -1,0 +1,17 @@
+{
+  "strategy": {
+    "name": "breakout_strategy"
+  },
+  "market_data": {
+    "trades": [
+      {"profit": 180, "regime": "Trending", "session": "London"},
+      {"profit": -80, "regime": "Low Liquidity", "session": "Asian"},
+      {"profit": -50, "regime": "News", "session": "New York"},
+      {"profit": 220, "regime": "Trending", "session": "Overlap"}
+    ]
+  },
+  "config": {
+    "starting_balance": 10000,
+    "save_memory": false
+  }
+}

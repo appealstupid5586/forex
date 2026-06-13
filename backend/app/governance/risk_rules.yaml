@@ -1,0 +1,5 @@
+max_risk_per_trade: 1
+max_daily_loss: 3
+max_weekly_loss: 8
+max_consecutive_losses: 5
+max_open_positions: 5

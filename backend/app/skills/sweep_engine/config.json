@@ -1,0 +1,13 @@
+{
+  "name": "sweep-engine",
+  "version": "0.1.0",
+  "author": "",
+  "description": "Orphan order detection and sweep engine skill.",
+  "interface": {
+    "programmatic": ["SweepEngine"],
+    "adapter": {
+      "input": ["state","broker_orders"],
+      "output": ["decision","confidence","evidence","metadata"]
+    }
+  }
+}

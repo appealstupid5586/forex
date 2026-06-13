@@ -1,0 +1,8 @@
+{
+  "metrics": [
+    {"name": "memory_size", "type": "integer"},
+    {"name": "pattern_count", "type": "integer"},
+    {"name": "winner_count", "type": "integer"},
+    {"name": "failure_count", "type": "integer"}
+  ]
+}

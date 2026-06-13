@@ -1,0 +1,13 @@
+{
+  "name": "optimization-engine",
+  "version": "0.1.0",
+  "author": "",
+  "description": "Parameter optimization and gene search skill.",
+  "interface": {
+    "programmatic": ["BacktestOptimizer"],
+    "adapter": {
+      "input": ["symbol","timeframe","step_range","x_range","risk_range"],
+      "output": ["decision","confidence","evidence","metadata"]
+    }
+  }
+}

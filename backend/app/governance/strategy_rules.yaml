@@ -1,0 +1,5 @@
+breakout: true
+pullback: true
+mean_reversion: false
+martingale: false
+grid: false

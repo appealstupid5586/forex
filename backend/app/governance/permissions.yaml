@@ -1,0 +1,10 @@
+market_analysis: true
+setup_detection: true
+risk_engine: true
+execution_engine: true
+hedge_engine: true
+
+backtesting: true
+journal_engine: true
+
+experimental_strategy: false

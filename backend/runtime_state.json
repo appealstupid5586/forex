@@ -1,0 +1,20 @@
+{
+  "robot": {
+    "robot_id": "hedge-math-os-001",
+    "symbol": "EURUSD",
+    "broker": "mock",
+    "magic_number": 29052026,
+    "status": "STOPPED",
+    "current_cycle_id": null,
+    "fsm_state": "BOOT",
+    "equity": 10000.0,
+    "balance": 10000.0,
+    "drawdown_pct": 0.0,
+    "margin_level_pct": 9999.0,
+    "consecutive_loss": 0,
+    "last_step": 0,
+    "last_heartbeat": "2026-06-03T03:23:19.666060Z"
+  },
+  "cycles": {},
+  "orders": {}
+}

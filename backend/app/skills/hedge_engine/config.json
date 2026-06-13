@@ -1,0 +1,13 @@
+{
+  "name": "hedge-engine",
+  "version": "0.1.0",
+  "author": "",
+  "description": "Hedge Engine skill: open/maintain hedge cycles and evaluate surplus.",
+  "interface": {
+    "programmatic": ["HedgeEngine"],
+    "adapter": {
+      "input": "robot_state + market_tick",
+      "output": ["decision","confidence","evidence","metadata"]
+    }
+  }
+}

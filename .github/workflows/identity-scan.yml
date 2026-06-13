@@ -1,0 +1,57 @@
+name: Identity Scan
+
+on:
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  scan-identity:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      - name: Run identity scan
+        env:
+          PYTHONPATH: backend
+        run: |
+          python scripts/scan_identity.py
+
+      - name: Read violations
+        id: read
+        run: |
+          python - <<'PY'
+          import json,sys,os
+          p = 'violations.json'
+          if not os.path.exists(p):
+              print('violations not found')
+              print('critical=false')
+              sys.exit(0)
+          j = json.load(open(p))
+          # define critical keys
+          critical_keys = ['imports_from_skills_in_agents','yaml_in_skills','my_new_key']
+          critical_found = any(len(j.get(k,[]))>0 for k in critical_keys)
+          # write outputs
+          print(f"critical={str(critical_found).lower()}")
+          # expose short summary as output
+          print(f"summary<<EOF\n{json.dumps(j, indent=2)}\nEOF")
+          PY
+
+      - name: Comment on PR with violations
+        uses: peter-evans/create-or-update-comment@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          body: |
+            **Identity scan results**
+            
+            ```json
+            ${{ steps.read.outputs.summary }}
+            ```
+
+      - name: Fail on critical violations
+        if: steps.read.outputs.critical == 'true'
+        run: |
+          echo "Critical policy violations found" >&2
+          exit 1

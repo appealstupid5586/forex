@@ -1,0 +1,8 @@
+{
+  "signal": "sell",
+  "skill": "execution_engine",
+  "strategy": "breakout",
+  "risk": {"risk": 2.5},
+  "capital": {"drawdown": 10, "margin_usage": 40, "free_margin": 70},
+  "session": {"asian_session": true}
+}

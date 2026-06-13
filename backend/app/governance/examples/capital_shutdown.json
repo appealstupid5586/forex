@@ -1,0 +1,8 @@
+{
+  "signal": "buy",
+  "skill": "execution_engine",
+  "strategy": "breakout",
+  "risk": {"risk": 0.8},
+  "capital": {"drawdown": 20, "margin_usage": 55, "free_margin": 35},
+  "session": {"asian_session": true, "london_session": true, "new_york_session": true}
+}

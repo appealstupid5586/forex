@@ -1,0 +1,13 @@
+{
+  "name": "risk-engine",
+  "version": "0.1.0",
+  "author": "",
+  "description": "Risk evaluation skill for guard logic.",
+  "interface": {
+    "programmatic": ["evaluate_risk"],
+    "adapter": {
+      "input": ["state","settings","market_tick"],
+      "output": ["allowed","action","reasons"]
+    }
+  }
+}

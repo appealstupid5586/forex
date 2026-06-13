@@ -1,0 +1,5 @@
+{"portfolio": {"holdings": [
+  {"symbol": "EURUSD", "value": 50000, "prices": [1, 1.01, 1.02, 1.03, 1.05]},
+  {"symbol": "USDJPY", "value": 30000, "prices": [100, 100.5, 101, 100.8, 101.2]},
+  {"symbol": "GBPUSD", "value": 20000, "prices": [1.4, 1.42, 1.41, 1.43, 1.39]}
+]}}

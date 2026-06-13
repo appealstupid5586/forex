@@ -1,0 +1,10 @@
+{
+  "metrics": [
+    {"name": "health_score", "type": "integer", "description": "Composite portfolio health score (0..100)"},
+    {"name": "risk_level", "type": "string", "description": "Overall portfolio risk classification"},
+    {"name": "correlation_score", "type": "float", "description": "Average absolute pairwise correlation of holdings returns (0..1)"},
+    {"name": "diversification_score", "type": "float", "description": "Diversification metric defined as 1 - HHI (0..1)"},
+    {"name": "exposure_score", "type": "float", "description": "Highest single position exposure fraction (0..1)"},
+    {"name": "margin_usage", "type": "float", "description": "Margin usage fraction (0..1)"}
+  ]
+}

@@ -1,0 +1,6 @@
+asian_session: true
+london_session: true
+new_york_session: true
+
+news_minutes_before: 15
+news_minutes_after: 30

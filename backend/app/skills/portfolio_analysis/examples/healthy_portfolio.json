@@ -1,0 +1,7 @@
+{
+  "holdings": [
+    {"symbol": "EURUSD", "value": 50000},
+    {"symbol": "USDJPY", "value": 30000},
+    {"symbol": "GBPUSD", "value": 20000}
+  ]
+}

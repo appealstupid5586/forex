@@ -1,0 +1,190 @@
+flowchart LR
+  backtesting["backtesting"]
+  execution["execution"]
+  journal["journal"]
+  market_analysis["market_analysis"]
+  risk_management["risk_management"]
+  shared["shared"]
+  signal_engine["signal_engine"]
+  backend_app_main{"backend.app.main"}
+  app_api_routes_backtest(("app.api.routes_backtest"))
+  app_api_routes_dashboard(("app.api.routes_dashboard"))
+  app_api_routes_fsm(("app.api.routes_fsm"))
+  app_api_routes_genes(("app.api.routes_genes"))
+  app_api_routes_grid(("app.api.routes_grid"))
+  app_api_routes_guard(("app.api.routes_guard"))
+  app_api_routes_memory(("app.api.routes_memory"))
+  app_api_routes_hooks(("app.api.routes_hooks"))
+  app_api_routes_identity(("app.api.routes_identity"))
+  app_api_routes_graph2(("app.api.routes_graph2"))
+  app_api_routes_robot(("app.api.routes_robot"))
+  app_core_config(("app.core.config"))
+  backend_app___init__{"backend.app.__init__"}
+  backend_app_sweep___init__{"backend.app.sweep.__init__"}
+  backend_app_sweep_sweep_engine{"backend.app.sweep.sweep_engine"}
+  app_core_models(("app.core.models"))
+  skills_shared["skills.shared"]
+  backend_app_guard___init__{"backend.app.guard.__init__"}
+  backend_app_guard_risk_guard{"backend.app.guard.risk_guard"}
+  skills_risk_management["skills.risk_management"]
+  backend_app_brain___init__{"backend.app.brain.__init__"}
+  backend_app_brain_fsm{"backend.app.brain.fsm"}
+  backend_app_market___init__{"backend.app.market.__init__"}
+  backend_app_market_feature_pipeline{"backend.app.market.feature_pipeline"}
+  backend_app_market_mock_market{"backend.app.market.mock_market"}
+  backend_app_core_runtime{"backend.app.core.runtime"}
+  app_brain_fsm(("app.brain.fsm"))
+  app_core_state_store(("app.core.state_store"))
+  app_execution_order_router(("app.execution.order_router"))
+  app_guard_risk_guard(("app.guard.risk_guard"))
+  app_market_mock_market(("app.market.mock_market"))
+  app_optimization_gene_search(("app.optimization.gene_search"))
+  app_strategy_hedge_engine(("app.strategy.hedge_engine"))
+  backend_app_core___init__{"backend.app.core.__init__"}
+  backend_app_core_config{"backend.app.core.config"}
+  data_data_enterprise_graph_json(("data:data/enterprise_graph.json"))
+  backend_app_core_models{"backend.app.core.models"}
+  backend_app_core_state_store{"backend.app.core.state_store"}
+  backend_app_execution___init__{"backend.app.execution.__init__"}
+  backend_app_execution_order_router{"backend.app.execution.order_router"}
+  skills_execution["skills.execution"]
+  backend_app_optimization_gene_search{"backend.app.optimization.gene_search"}
+  backend_app_optimization___init__{"backend.app.optimization.__init__"}
+  backend_app_api_routes_identity{"backend.app.api.routes_identity"}
+  app_core_runtime(("app.core.runtime"))
+  backend_app_api_routes_graph2{"backend.app.api.routes_graph2"}
+  backend_app_api_routes_grid{"backend.app.api.routes_grid"}
+  app_strategy_grid_math(("app.strategy.grid_math"))
+  backend_app_api_routes_genes{"backend.app.api.routes_genes"}
+  backend_app_api_routes_memory{"backend.app.api.routes_memory"}
+  backend_app_api_routes_backtest{"backend.app.api.routes_backtest"}
+  backend_app_api___init__{"backend.app.api.__init__"}
+  backend_app_api_routes_hooks{"backend.app.api.routes_hooks"}
+  backend_app_api_routes_guard{"backend.app.api.routes_guard"}
+  backend_app_api_routes_fsm{"backend.app.api.routes_fsm"}
+  backend_app_api_routes_robot{"backend.app.api.routes_robot"}
+  backend_app_api_routes_graph{"backend.app.api.routes_graph"}
+  backend_app_api_routes_dashboard{"backend.app.api.routes_dashboard"}
+  backend_app_memory___init__{"backend.app.memory.__init__"}
+  backend_app_strategy_grid_math{"backend.app.strategy.grid_math"}
+  backend_app_strategy___init__{"backend.app.strategy.__init__"}
+  backend_app_strategy_hedge_engine{"backend.app.strategy.hedge_engine"}
+  skills___init__["skills.__init__"]
+  skills_journal_schemas["skills.journal.schemas"]
+  skills_journal_trade_statistics["skills.journal.trade_statistics"]
+  skills_journal___init__["skills.journal.__init__"]
+  skills_journal_export_journal["skills.journal.export_journal"]
+  skills_journal_save_trade["skills.journal.save_trade"]
+  skills_market_analysis_trend["skills.market_analysis.trend"]
+  skills_market_analysis["skills.market_analysis"]
+  skills_market_analysis_support_resistance["skills.market_analysis.support_resistance"]
+  skills_market_analysis_schemas["skills.market_analysis.schemas"]
+  skills_market_analysis___init__["skills.market_analysis.__init__"]
+  skills_market_analysis_liquidity["skills.market_analysis.liquidity"]
+  skills_execution_close_order["skills.execution.close_order"]
+  skills_execution_schemas["skills.execution.schemas"]
+  skills_execution_modify_order["skills.execution.modify_order"]
+  skills_execution___init__["skills.execution.__init__"]
+  skills_execution_adapter["skills.execution.adapter"]
+  skills_execution_open_order["skills.execution.open_order"]
+  skills_backtesting_schemas["skills.backtesting.schemas"]
+  skills_backtesting___init__["skills.backtesting.__init__"]
+  skills_backtesting_run_backtest["skills.backtesting.run_backtest"]
+  skills_backtesting["skills.backtesting"]
+  skills_backtesting_metrics["skills.backtesting.metrics"]
+  skills_backtesting_equity_curve["skills.backtesting.equity_curve"]
+  skills_risk_management_schemas["skills.risk_management.schemas"]
+  skills_risk_management___init__["skills.risk_management.__init__"]
+  skills_risk_management_take_profit["skills.risk_management.take_profit"]
+  skills_risk_management_position_size["skills.risk_management.position_size"]
+  skills_risk_management_risk_reward["skills.risk_management.risk_reward"]
+  skills_risk_management_stop_loss["skills.risk_management.stop_loss"]
+  skills_risk_management_risk_guard["skills.risk_management.risk_guard"]
+  skills_shared_optimizer["skills.shared.optimizer"]
+  skills_shared_sweep["skills.shared.sweep"]
+  skills_shared_exceptions["skills.shared.exceptions"]
+  skills_shared___init__["skills.shared.__init__"]
+  skills_shared_utils["skills.shared.utils"]
+  skills_shared_enums["skills.shared.enums"]
+  skills_shared_memory["skills.shared.memory"]
+  skills_shared_constants["skills.shared.constants"]
+  skills_shared_fsm["skills.shared.fsm"]
+  skills_shared_skill_metadata["skills.shared.skill_metadata"]
+  skills_shared_models["skills.shared.models"]
+  skills_shared_mock_market["skills.shared.mock_market"]
+  skills_signal_engine_schemas["skills.signal_engine.schemas"]
+  skills_signal_engine___init__["skills.signal_engine.__init__"]
+  skills_signal_engine_ema_cross["skills.signal_engine.ema_cross"]
+  skills_signal_engine_breakout["skills.signal_engine.breakout"]
+  skills_signal_engine_bos["skills.signal_engine.bos"]
+  backend_app_main -->|"runtime"| app_api_routes_backtest
+  backend_app_main -->|"runtime"| app_api_routes_dashboard
+  backend_app_main -->|"runtime"| app_api_routes_fsm
+  backend_app_main -->|"runtime"| app_api_routes_genes
+  backend_app_main -->|"runtime"| app_api_routes_grid
+  backend_app_main -->|"runtime"| app_api_routes_guard
+  backend_app_main -->|"runtime"| app_api_routes_memory
+  backend_app_main -->|"runtime"| app_api_routes_hooks
+  backend_app_main -->|"runtime"| app_api_routes_identity
+  backend_app_main -->|"runtime"| app_api_routes_graph2
+  backend_app_main -->|"runtime"| app_api_routes_robot
+  backend_app_main -->|"runtime"| app_core_config
+  backend_app_sweep_sweep_engine -->|"runtime"| app_core_models
+  backend_app_sweep_sweep_engine -->|"capability"| skills_shared
+  backend_app_guard_risk_guard -->|"runtime"| app_core_config
+  backend_app_guard_risk_guard -->|"runtime"| app_core_models
+  backend_app_guard_risk_guard -->|"capability"| skills_risk_management
+  backend_app_brain_fsm -->|"runtime"| app_core_models
+  backend_app_brain_fsm -->|"capability"| skills_shared
+  backend_app_market_mock_market -->|"runtime"| app_core_models
+  backend_app_market_mock_market -->|"capability"| skills_shared
+  backend_app_core_runtime -->|"runtime"| app_brain_fsm
+  backend_app_core_runtime -->|"runtime"| app_core_config
+  backend_app_core_runtime -->|"runtime"| app_core_models
+  backend_app_core_runtime -->|"runtime"| app_core_state_store
+  backend_app_core_runtime -->|"runtime"| app_execution_order_router
+  backend_app_core_runtime -->|"runtime"| app_guard_risk_guard
+  backend_app_core_runtime -->|"runtime"| app_market_mock_market
+  backend_app_core_runtime -->|"runtime"| app_optimization_gene_search
+  backend_app_core_runtime -->|"runtime"| app_strategy_hedge_engine
+  backend_app_core_runtime -->|"capability"| skills_shared
+  backend_app_core_config -->|"data"| data_data_enterprise_graph_json
+  backend_app_core_state_store -->|"runtime"| app_core_models
+  backend_app_execution_order_router -->|"runtime"| app_core_config
+  backend_app_execution_order_router -->|"runtime"| app_core_models
+  backend_app_execution_order_router -->|"capability"| skills_execution
+  backend_app_optimization_gene_search -->|"capability"| skills_shared
+  backend_app_api_routes_identity -->|"runtime"| app_core_runtime
+  backend_app_api_routes_graph2 -->|"runtime"| app_core_config
+  backend_app_api_routes_grid -->|"runtime"| app_core_config
+  backend_app_api_routes_grid -->|"runtime"| app_strategy_grid_math
+  backend_app_api_routes_genes -->|"runtime"| app_core_runtime
+  backend_app_api_routes_memory -->|"runtime"| app_core_runtime
+  backend_app_api_routes_backtest -->|"runtime"| app_core_runtime
+  backend_app_api_routes_hooks -->|"runtime"| app_core_runtime
+  backend_app_api_routes_guard -->|"runtime"| app_core_runtime
+  backend_app_api_routes_fsm -->|"runtime"| app_core_config
+  backend_app_api_routes_fsm -->|"runtime"| app_core_runtime
+  backend_app_api_routes_fsm -->|"runtime"| app_core_runtime
+  backend_app_api_routes_fsm -->|"runtime"| app_strategy_grid_math
+  backend_app_api_routes_robot -->|"runtime"| app_core_models
+  backend_app_api_routes_robot -->|"runtime"| app_core_runtime
+  backend_app_api_routes_dashboard -->|"runtime"| app_core_config
+  backend_app_api_routes_dashboard -->|"runtime"| app_core_runtime
+  backend_app_strategy_grid_math -->|"runtime"| app_core_models
+  backend_app_strategy_hedge_engine -->|"runtime"| app_core_models
+  skills_market_analysis_trend -->|"capability"| skills_market_analysis
+  skills_market_analysis_trend -->|"capability"| skills_shared
+  skills_execution_adapter -->|"runtime"| app_core_config
+  skills_execution_adapter -->|"runtime"| app_core_models
+  skills_backtesting_run_backtest -->|"capability"| skills_backtesting
+  skills_risk_management_position_size -->|"capability"| skills_shared
+  skills_risk_management_risk_guard -->|"runtime"| app_core_config
+  skills_risk_management_risk_guard -->|"runtime"| app_core_models
+  skills_shared_optimizer -->|"runtime"| app_core_models
+  skills_shared_sweep -->|"runtime"| app_core_models
+  skills_shared_memory -->|"runtime"| app_core_models
+  skills_shared_memory -->|"runtime"| app_core_state_store
+  skills_shared_fsm -->|"runtime"| app_core_models
+  skills_shared_mock_market -->|"runtime"| app_core_models
+  skills_signal_engine_ema_cross -->|"capability"| skills_shared

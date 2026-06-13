@@ -1,0 +1,13 @@
+{
+  "name": "execution-engine",
+  "version": "0.1.0",
+  "author": "",
+  "description": "Order routing and execution orchestration skill.",
+  "interface": {
+    "programmatic": ["ExecutionEngine"],
+    "adapter": {
+      "input": ["order","settings"],
+      "output": ["decision","confidence","evidence","metadata"]
+    }
+  }
+}

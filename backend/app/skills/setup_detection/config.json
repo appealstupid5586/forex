@@ -1,0 +1,10 @@
+{
+  "name": "PLACEHOLDER",
+  "version": "0.1.0",
+  "author": "",
+  "description": "Skill scaffolded per Phase B",
+  "interface": {
+    "input": "market_state",
+    "output": ["decision","confidence","evidence","metadata"]
+  }
+}

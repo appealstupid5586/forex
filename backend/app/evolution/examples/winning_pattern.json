@@ -1,0 +1,8 @@
+{
+  "symbol": "XAUUSD",
+  "event": "breakout",
+  "market_regime": "trending",
+  "session": "london",
+  "outcome": "winner",
+  "confidence": 0.82
+}

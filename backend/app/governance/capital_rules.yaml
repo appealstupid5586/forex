@@ -1,0 +1,4 @@
+max_account_drawdown: 15
+max_margin_usage: 50
+minimum_free_margin: 40
+max_symbol_exposure: 2

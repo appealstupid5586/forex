@@ -1,0 +1,10 @@
+minimum_trades_for_evolution: 100
+minimum_pattern_confidence: 0.7
+minimum_win_rate: 0.55
+enable_session_learning: true
+enable_regime_learning: true
+enable_symbol_learning: true
+minimum_future_candidates: 5
+minimum_future_confidence: 0.6
+enable_diffusion_learning: true
+enable_winner_dna_extraction: true

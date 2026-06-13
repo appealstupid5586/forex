@@ -1,0 +1,4 @@
+allowBuilds:
+  esbuild: false
+patchedDependencies:
+  '@ant-design-vue/pro-layout@1.0.13': patches/@ant-design-vue__pro-layout@1.0.13.patch

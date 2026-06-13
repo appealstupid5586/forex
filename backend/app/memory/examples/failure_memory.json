@@ -1,0 +1,9 @@
+{
+  "trade_id": "t-321",
+  "symbol": "USDJPY",
+  "direction": "SHORT",
+  "result": -50.0,
+  "session": "Asia",
+  "regime": "Volatile",
+  "evidence": "evidence-2"
+}

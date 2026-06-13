@@ -1,0 +1,9 @@
+{
+  "tracked_metrics": [
+    "profit_factor",
+    "expectancy",
+    "recovery_factor",
+    "max_drawdown",
+    "sharpe_ratio"
+  ]
+}

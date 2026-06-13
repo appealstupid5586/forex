@@ -1,26 +1,15 @@
-"""Market Analysis Skill - Regime Detection System
-
-Based on Dow Theory + Price Action + Regime-First Architecture
-
-Core Principle:
-  Market → Regime → Trend Strength → Setup → Risk → Execution → Journal → Memory → Evolution
-"""
-
-from .regime_detector import RegimeDetector
-from .structure_detector import StructureDetector
-from .trend_strength import TrendStrengthAnalyzer
-from .momentum_detector import MomentumDetector
-from .volatility_detector import VolatilityDetector
-from .types import RegimeType, MarketAnalysisOutput
+from .mock_market import MockMarketDataAgent
+from .regime_detector import detect_regime
+from .structure_detector import detect_structure
+from .volatility_detector import detect_volatility
+from .momentum_detector import detect_momentum
+from .trend_strength import determine_strength
 
 __all__ = [
-    "RegimeDetector",
-    "StructureDetector",
-    "TrendStrengthAnalyzer",
-    "MomentumDetector",
-    "VolatilityDetector",
-    "RegimeType",
-    "MarketAnalysisOutput",
+    "MockMarketDataAgent",
+    "detect_regime",
+    "detect_structure",
+    "detect_volatility",
+    "detect_momentum",
+    "determine_strength",
 ]
-
-__version__ = "1.0.0"

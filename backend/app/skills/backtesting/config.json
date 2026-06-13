@@ -1,0 +1,13 @@
+{
+  "name": "backtesting",
+  "version": "0.1.0",
+  "author": "TUNGNS Trading OS",
+  "description": "Evidence-first backtesting skill for survival, drawdown, regime, and weakness analysis.",
+  "interface": {
+    "input": ["strategy", "market_data", "config"],
+    "output": ["win_rate", "profit_factor", "max_drawdown", "best_regime", "worst_regime", "weaknesses", "evidence"]
+  },
+  "hooks": ["after_backtest"],
+  "memory": ["winners", "failures", "patterns", "strategies"],
+  "principles": ["Small Files", "Single Responsibility", "Evidence First", "Memory First", "Generate -> Verify -> Publish"]
+}

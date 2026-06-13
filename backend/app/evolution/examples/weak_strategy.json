@@ -1,0 +1,6 @@
+{
+  "strategy": "mean_reversion",
+  "weakness": "low_win_rate",
+  "suggested_action": "parameter_review",
+  "confidence": 0.78
+}

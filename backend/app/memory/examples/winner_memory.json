@@ -1,0 +1,9 @@
+{
+  "trade_id": "t-123",
+  "symbol": "EURUSD",
+  "direction": "LONG",
+  "result": 120.5,
+  "session": "London",
+  "regime": "Trending",
+  "evidence": "evidence-1"
+}

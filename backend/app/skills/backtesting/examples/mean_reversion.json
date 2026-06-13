@@ -1,0 +1,16 @@
+{
+  "strategy": {
+    "name": "mean_reversion"
+  },
+  "market_data": {
+    "trades": [
+      {"profit": 120, "regime": "Ranging", "session": "London"},
+      {"profit": -60, "regime": "Trending", "session": "New York"},
+      {"profit": 90, "regime": "Ranging", "session": "Asian"}
+    ]
+  },
+  "config": {
+    "starting_balance": 10000,
+    "save_memory": false
+  }
+}

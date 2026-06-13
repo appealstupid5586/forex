@@ -1,0 +1,1277 @@
+{
+  "skills.backtesting.equity_curve": {
+    "name": "skills.backtesting.equity_curve.build_equity_curve",
+    "description": "Build an equity curve from historical prices and position sizes.",
+    "version": "1.0.0",
+    "category": "backtesting",
+    "inputs": [
+      {
+        "name": "prices",
+        "description": "Historical price series.",
+        "data_type": "List[float]",
+        "required": true,
+        "example": [
+          100.0,
+          101.0,
+          102.0
+        ]
+      },
+      {
+        "name": "positions",
+        "description": "Position size for each price point.",
+        "data_type": "List[float]",
+        "required": true,
+        "example": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    ],
+    "outputs": [
+      {
+        "name": "equity_curve",
+        "description": "Calculated equity curve values.",
+        "data_type": "List[float]",
+        "required": true,
+        "example": null
+      }
+    ],
+    "dependencies": [],
+    "examples": [
+      {
+        "input": {
+          "prices": [
+            100.0,
+            101.0,
+            102.0
+          ],
+          "positions": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "output": [
+          100.0,
+          101.0,
+          102.0
+        ]
+      }
+    ],
+    "tags": [
+      "backtesting",
+      "equity_curve",
+      "metrics"
+    ]
+  },
+  "skills.backtesting.metrics": {
+    "name": "skills.backtesting.metrics",
+    "description": "Calculate backtesting performance metrics such as return and Sharpe ratio.",
+    "version": "1.0.0",
+    "category": "backtesting",
+    "inputs": [
+      {
+        "name": "start_balance",
+        "description": "Starting account balance.",
+        "data_type": "float",
+        "required": true,
+        "example": 10000.0
+      },
+      {
+        "name": "end_balance",
+        "description": "Ending account balance.",
+        "data_type": "float",
+        "required": true,
+        "example": 11000.0
+      },
+      {
+        "name": "returns",
+        "description": "Sequence of period returns.",
+        "data_type": "List[float]",
+        "required": false,
+        "example": [
+          0.01,
+          0.02,
+          -0.005
+        ]
+      },
+      {
+        "name": "risk_free_rate",
+        "description": "Risk-free return rate for Sharpe ratio calculation.",
+        "data_type": "float",
+        "required": false,
+        "example": 0.0
+      }
+    ],
+    "outputs": [
+      {
+        "name": "return",
+        "description": "Total return over the period.",
+        "data_type": "float",
+        "required": true,
+        "example": null
+      },
+      {
+        "name": "sharpe_ratio",
+        "description": "Sharpe ratio calculated from returns.",
+        "data_type": "float",
+        "required": true,
+        "example": null
+      }
+    ],
+    "dependencies": [],
+    "examples": [
+      {
+        "input": {
+          "start_balance": 10000.0,
+          "end_balance": 11000.0,
+          "returns": [
+            0.01,
+            0.02
+          ]
+        },
+        "output": {
+          "return": 0.1,
+          "sharpe_ratio": 1.3
+        }
+      }
+    ],
+    "tags": [
+      "backtesting",
+      "metrics",
+      "performance"
+    ]
+  },
+  "skills.backtesting.run_backtest": {
+    "name": "skills.backtesting.run_backtest",
+    "description": "Execute a simple backtest using price history and trading signals.",
+    "version": "1.0.0",
+    "category": "backtesting",
+    "inputs": [
+      {
+        "name": "prices",
+        "description": "Historical price series for backtesting.",
+        "data_type": "List[float]",
+        "required": true,
+        "example": [
+          100.0,
+          101.0,
+          102.0
+        ]
+      },
+      {
+        "name": "signals",
+        "description": "Trading signals mapped to each price.",
+        "data_type": "List[str]",
+        "required": true,
+        "example": [
+          "buy",
+          "hold",
+          "sell"
+        ]
+      }
+    ],
+    "outputs": [
+      {
+        "name": "final_balance",
+        "description": "Final account balance after backtest.",
+        "data_type": "float",
+        "required": true,
+        "example": null
+      },
+      {
+        "name": "trades",
+        "description": "Executed trade log.",
+        "data_type": "List[dict]",
+        "required": true,
+        "example": null
+      }
+    ],
+    "dependencies": [
+      "skills.backtesting.schemas.BacktestResult"
+    ],
+    "examples": [
+      {
+        "input": {
+          "prices": [
+            100.0,
+            105.0,
+            110.0
+          ],
+          "signals": [
+            "buy",
+            "hold",
+            "sell"
+          ]
+        },
+        "output": {
+          "final_balance": 11000.0,
+          "trades": [
+            {
+              "type": "buy",
+              "price": 100.0
+            }
+          ]
+        }
+      }
+    ],
+    "tags": [
+      "backtesting",
+      "simulation",
+      "signals"
+    ]
+  },
+  "skills.execution.adapter": {
+    "name": "skills.execution.adapter",
+    "description": "Build order status decisions and broker order identifiers based on execution settings.",
+    "version": "1.0.0",
+    "category": "execution",
+    "inputs": [
+      {
+        "name": "settings",
+        "description": "Runtime execution settings.",
+        "data_type": "Settings",
+        "required": true,
+        "example": null
+      }
+    ],
+    "outputs": [
+      {
+        "name": "order_status",
+        "description": "Determined order status.",
+        "data_type": "OrderStatus",
+        "required": true,
+        "example": null
+      },
+      {
+        "name": "broker_order_id",
+        "description": "Generated broker order identifier.",
+        "data_type": "str",
+        "required": true,
+        "example": null
+      }
+    ],
+    "dependencies": [
+      "app.core.config.Settings",
+      "app.core.models.OrderStatus"
+    ],
+    "examples": [
+      {
+        "input": {
+          "settings": "settings object"
+        },
+        "output": {
+          "order_status": "OrderStatus",
+          "broker_order_id": "MOCK-..."
+        }
+      }
+    ],
+    "tags": [
+      "execution",
+      "adapter",
+      "order_routing"
+    ]
+  },
+  "skills.execution.close_order": {
+    "name": "skills.execution.close_order",
+    "description": "Build a close order payload for market order execution.",
+    "version": "1.0.0",
+    "category": "execution",
+    "inputs": [
+      {
+        "name": "symbol",
+        "description": "Trading symbol to close.",
+        "data_type": "str",
+        "required": true,
+        "example": "EURUSD"
+      },
+      {
+        "name": "quantity",
+        "description": "Quantity to close.",
+        "data_type": "float",
+        "required": true,
+        "example": 1.0
+      },
+      {
+        "name": "side",
+        "description": "Order side for close operation.",
+        "data_type": "str",
+        "required": true,
+        "example": "sell"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "order_payload",
+        "description": "Order payload ready for broker execution.",
+        "data_type": "Dict[str, object]",
+        "required": true,
+        "example": null
+      }
+    ],
+    "dependencies": [],
+    "examples": [
+      {
+        "input": {
+          "symbol": "EURUSD",
+          "quantity": 1.0,
+          "side": "sell"
+        },
+        "output": {
+          "symbol": "EURUSD",
+          "quantity": 1.0,
+          "side": "sell",
+          "type": "market"
+        }
+      }
+    ],
+    "tags": [
+      "execution",
+      "close_order"
+    ]
+  },
+  "skills.execution.modify_order": {
+    "name": "skills.execution.modify_order",
+    "description": "Build a modify order payload for updating order price or quantity.",
+    "version": "1.0.0",
+    "category": "execution",
+    "inputs": [
+      {
+        "name": "order_id",
+        "description": "Identifier of the order to modify.",
+        "data_type": "str",
+        "required": true,
+        "example": "MOCK-1234"
+      },
+      {
+        "name": "new_price",
+        "description": "New price for the order.",
+        "data_type": "float",
+        "required": false,
+        "example": 1.2345
+      },
+      {
+        "name": "new_quantity",
+        "description": "New quantity for the order.",
+        "data_type": "float",
+        "required": false,
+        "example": 1.5
+      }
+    ],
+    "outputs": [
+      {
+        "name": "payload",
+        "description": "Order modification payload.",
+        "data_type": "Dict[str, object]",
+        "required": true,
+        "example": null
+      }
+    ],
+    "dependencies": [],
+    "examples": [
+      {
+        "input": {
+          "order_id": "MOCK-1234",
+          "new_price": 1.23
+        },
+        "output": {
+          "order_id": "MOCK-1234",
+          "price": 1.23
+        }
+      }
+    ],
+    "tags": [
+      "execution",
+      "modify_order"
+    ]
+  },
+  "skills.execution.open_order": {
+    "name": "skills.execution.open_order",
+    "description": "Build an open order payload for market or limit order execution.",
+    "version": "1.0.0",
+    "category": "execution",
+    "inputs": [
+      {
+        "name": "symbol",
+        "description": "Trading symbol to open.",
+        "data_type": "str",
+        "required": true,
+        "example": "EURUSD"
+      },
+      {
+        "name": "quantity",
+        "description": "Order quantity.",
+        "data_type": "float",
+        "required": true,
+        "example": 1.0
+      },
+      {
+        "name": "side",
+        "description": "Order side to open.",
+        "data_type": "str",
+        "required": true,
+        "example": "buy"
+      },
+      {
+        "name": "price",
+        "description": "Optional limit price to open with.",
+        "data_type": "float",
+        "required": false,
+        "example": 1.2345
+      }
+    ],
+    "outputs": [
+      {
+        "name": "order_payload",
+        "description": "Order payload for broker execution.",
+        "data_type": "Dict[str, object]",
+        "required": true,
+        "example": null
+      }
+    ],
+    "dependencies": [],
+    "examples": [
+      {
+        "input": {
+          "symbol": "EURUSD",
+          "quantity": 1.0,
+          "side": "buy"
+        },
+        "output": {
+          "symbol": "EURUSD",
+          "quantity": 1.0,
+          "side": "buy",
+          "type": "market"
+        }
+      }
+    ],
+    "tags": [
+      "execution",
+      "open_order"
+    ]
+  },
+  "skills.journal.export_journal": {
+    "name": "skills.journal.export_journal",
+    "description": "Export journal entries to CSV format.",
+    "version": "1.0.0",
+    "category": "journal",
+    "inputs": [
+      {
+        "name": "entries",
+        "description": "Journal entries to export.",
+        "data_type": "List[Dict[str, object]]",
+        "required": true,
+        "example": [
+          {
+            "symbol": "EURUSD",
+            "profit": 10.0
+          }
+        ]
+      }
+    ],
+    "outputs": [
+      {
+        "name": "csv_text",
+        "description": "CSV-formatted string of journal entries.",
+        "data_type": "str",
+        "required": true,
+        "example": null
+      }
+    ],
+    "dependencies": [],
+    "examples": [
+      {
+        "input": {
+          "entries": [
+            {
+              "symbol": "EURUSD",
+              "profit": 10.0
+            }
+          ]
+        },
+        "output": "symbol,profit\\nEURUSD,10.0"
+      }
+    ],
+    "tags": [
+      "journal",
+      "export"
+    ]
+  },
+  "skills.journal.save_trade": {
+    "name": "skills.journal.save_trade",
+    "description": "Save a trade entry into a journal storage list.",
+    "version": "1.0.0",
+    "category": "journal",
+    "inputs": [
+      {
+        "name": "entry",
+        "description": "Trade entry data to save.",
+        "data_type": "Dict[str, object]",
+        "required": true,
+        "example": {
+          "symbol": "EURUSD",
+          "profit": 10.0
+        }
+      },
+      {
+        "name": "storage",
+        "description": "Storage list for journal entries.",
+        "data_type": "list",
+        "required": true,
+        "example": []
+      }
+    ],
+    "outputs": [
+      {
+        "name": "result",
+        "description": "No explicit return value; storage list is appended.",
+        "data_type": "None",
+        "required": false,
+        "example": null
+      }
+    ],
+    "dependencies": [],
+    "examples": [
+      {
+        "input": {
+          "entry": {
+            "symbol": "EURUSD",
+            "profit": 10.0
+          },
+          "storage": []
+        },
+        "output": null
+      }
+    ],
+    "tags": [
+      "journal",
+      "persistence"
+    ]
+  },
+  "skills.journal.trade_statistics": {
+    "name": "skills.journal.trade_statistics",
+    "description": "Calculate trade statistics such as win rate and average return.",
+    "version": "1.0.0",
+    "category": "journal",
+    "inputs": [
+      {
+        "name": "results",
+        "description": "List of trade win/loss results.",
+        "data_type": "List[bool]",
+        "required": true,
+        "example": [
+          true,
+          false,
+          true
+        ]
+      },
+      {
+        "name": "returns",
+        "description": "List of trade returns.",
+        "data_type": "List[float]",
+        "required": false,
+        "example": [
+          0.01,
+          0.02,
+          -0.005
+        ]
+      }
+    ],
+    "outputs": [
+      {
+        "name": "win_rate",
+        "description": "Win rate across trades.",
+        "data_type": "float",
+        "required": true,
+        "example": null
+      },
+      {
+        "name": "average_return",
+        "description": "Average return across trades.",
+        "data_type": "float",
+        "required": true,
+        "example": null
+      }
+    ],
+    "dependencies": [],
+    "examples": [
+      {
+        "input": {
+          "results": [
+            true,
+            false,
+            true
+          ],
+          "returns": [
+            0.01,
+            0.02,
+            -0.005
+          ]
+        },
+        "output": {
+          "win_rate": 0.6667,
+          "average_return": 0.008333
+        }
+      }
+    ],
+    "tags": [
+      "journal",
+      "statistics"
+    ]
+  },
+  "skills.market_analysis.liquidity": {
+    "name": "skills.market_analysis.liquidity",
+    "description": "Analyze liquidity by computing average volume and detecting volume spikes.",
+    "version": "1.0.0",
+    "category": "market_analysis",
+    "inputs": [
+      {
+        "name": "volumes",
+        "description": "Volume series for recent market activity.",
+        "data_type": "List[float]",
+        "required": true,
+        "example": [
+          1000.0,
+          1500.0,
+          4000.0
+        ]
+      },
+      {
+        "name": "threshold",
+        "description": "Liquidity spike threshold multiplier.",
+        "data_type": "float",
+        "required": false,
+        "example": 2.0
+      }
+    ],
+    "outputs": [
+      {
+        "name": "average_volume",
+        "description": "Average traded volume.",
+        "data_type": "float",
+        "required": true,
+        "example": null
+      },
+      {
+        "name": "liquidity_spike",
+        "description": "Whether the latest volume is a liquidity spike.",
+        "data_type": "bool",
+        "required": true,
+        "example": null
+      }
+    ],
+    "dependencies": [],
+    "examples": [
+      {
+        "input": {
+          "volumes": [
+            1000.0,
+            1100.0,
+            5000.0
+          ]
+        },
+        "output": {
+          "average_volume": 2033.33,
+          "liquidity_spike": true
+        }
+      }
+    ],
+    "tags": [
+      "market_analysis",
+      "liquidity"
+    ]
+  },
+  "skills.market_analysis.support_resistance": {
+    "name": "skills.market_analysis.support_resistance",
+    "description": "Identify support and resistance levels from price history.",
+    "version": "1.0.0",
+    "category": "market_analysis",
+    "inputs": [
+      {
+        "name": "prices",
+        "description": "Price series for support/resistance detection.",
+        "data_type": "List[float]",
+        "required": true,
+        "example": [
+          1.0,
+          1.01,
+          1.02,
+          1.03,
+          1.02,
+          1.01
+        ]
+      },
+      {
+        "name": "window",
+        "description": "Window size for level detection.",
+        "data_type": "int",
+        "required": false,
+        "example": 5
+      }
+    ],
+    "outputs": [
+      {
+        "name": "supports",
+        "description": "Detected support levels.",
+        "data_type": "List[float]",
+        "required": true,
+        "example": null
+      },
+      {
+        "name": "resistances",
+        "description": "Detected resistance levels.",
+        "data_type": "List[float]",
+        "required": true,
+        "example": null
+      }
+    ],
+    "dependencies": [],
+    "examples": [
+      {
+        "input": {
+          "prices": [
+            1.0,
+            1.1,
+            1.05,
+            1.2,
+            1.15,
+            1.25
+          ]
+        },
+        "output": {
+          "supports": [],
+          "resistances": [
+            1.2
+          ]
+        }
+      }
+    ],
+    "tags": [
+      "market_analysis",
+      "support_resistance"
+    ]
+  },
+  "skills.market_analysis.trend": {
+    "name": "skills.market_analysis.trend.detect_trend",
+    "description": "Detect market trend direction and confidence from price history.",
+    "version": "1.0.0",
+    "category": "market_analysis",
+    "inputs": [
+      {
+        "name": "prices",
+        "description": "A list of historical price values.",
+        "data_type": "List[float]",
+        "required": true,
+        "example": [
+          1.0,
+          1.01,
+          1.02
+        ]
+      },
+      {
+        "name": "sensitivity",
+        "description": "Minimum percentage movement required to define a trend.",
+        "data_type": "float",
+        "required": false,
+        "example": 0.005
+      }
+    ],
+    "outputs": [
+      {
+        "name": "trend_result",
+        "description": "Trend direction and confidence score.",
+        "data_type": "TrendResult",
+        "required": true,
+        "example": null
+      }
+    ],
+    "dependencies": [
+      "skills.market_analysis.schemas.TrendResult",
+      "skills.market_analysis.schemas.TrendDirection"
+    ],
+    "examples": [
+      {
+        "input": {
+          "prices": [
+            1.0,
+            1.01,
+            1.02
+          ],
+          "sensitivity": 0.005
+        },
+        "output": {
+          "direction": "BULLISH",
+          "confidence": 0.8
+        }
+      }
+    ],
+    "tags": [
+      "trend",
+      "market_analysis",
+      "signal_preparation"
+    ]
+  },
+  "skills.risk_management.position_size": {
+    "name": "skills.risk_management.position_size.calculate_position_size",
+    "description": "Calculate the position size based on account balance, risk ratio, stop loss distance, and price.",
+    "version": "1.0.0",
+    "category": "risk_management",
+    "inputs": [
+      {
+        "name": "account_balance",
+        "description": "The available trading capital.",
+        "data_type": "float",
+        "required": true,
+        "example": 10000.0
+      },
+      {
+        "name": "risk_per_trade",
+        "description": "The fraction of capital to risk on the trade.",
+        "data_type": "float",
+        "required": true,
+        "example": 0.01
+      },
+      {
+        "name": "stop_distance",
+        "description": "Stop loss distance in price units.",
+        "data_type": "float",
+        "required": true,
+        "example": 0.02
+      },
+      {
+        "name": "price",
+        "description": "Current market price for the instrument.",
+        "data_type": "float",
+        "required": true,
+        "example": 1.25
+      }
+    ],
+    "outputs": [
+      {
+        "name": "position_size",
+        "description": "Calculated number of lots or units to trade.",
+        "data_type": "Optional[float]",
+        "required": false,
+        "example": null
+      }
+    ],
+    "dependencies": [],
+    "examples": [
+      {
+        "input": {
+          "account_balance": 10000.0,
+          "risk_per_trade": 0.01,
+          "stop_distance": 0.02,
+          "price": 1.25
+        },
+        "output": 4000.0
+      }
+    ],
+    "tags": [
+      "risk_management",
+      "position_sizing",
+      "trade_risk"
+    ]
+  },
+  "skills.risk_management.risk_guard": {
+    "name": "skills.risk_management.risk_guard",
+    "description": "Evaluate risk state and decide whether to allow, pause, or reduce exposure.",
+    "version": "1.0.0",
+    "category": "risk_management",
+    "inputs": [
+      {
+        "name": "state",
+        "description": "Current robot state.",
+        "data_type": "RobotState",
+        "required": true,
+        "example": null
+      },
+      {
+        "name": "settings",
+        "description": "Risk configuration settings.",
+        "data_type": "Settings",
+        "required": true,
+        "example": null
+      },
+      {
+        "name": "tick",
+        "description": "Optional latest market tick.",
+        "data_type": "MarketTick",
+        "required": false,
+        "example": null
+      },
+      {
+        "name": "api_latency_ms",
+        "description": "Current API latency in milliseconds.",
+        "data_type": "int",
+        "required": false,
+        "example": 50
+      }
+    ],
+    "outputs": [
+      {
+        "name": "risk_decision",
+        "description": "Risk decision object indicating whether execution is allowed.",
+        "data_type": "RiskDecision",
+        "required": true,
+        "example": null
+      }
+    ],
+    "dependencies": [
+      "app.core.models.RobotState",
+      "app.core.models.Settings",
+      "app.core.models.MarketTick",
+      "app.core.models.RiskDecision"
+    ],
+    "examples": [
+      {
+        "input": {
+          "state": "robot state",
+          "settings": "settings object"
+        },
+        "output": {
+          "allowed": true,
+          "action": "ALLOW",
+          "reasons": []
+        }
+      }
+    ],
+    "tags": [
+      "risk_management",
+      "risk_guard"
+    ]
+  },
+  "skills.risk_management.risk_reward": {
+    "name": "skills.risk_management.risk_reward",
+    "description": "Calculate the risk/reward ratio for a trade setup.",
+    "version": "1.0.0",
+    "category": "risk_management",
+    "inputs": [
+      {
+        "name": "stop_distance",
+        "description": "Distance from entry to stop loss.",
+        "data_type": "float",
+        "required": true,
+        "example": 0.01
+      },
+      {
+        "name": "profit_distance",
+        "description": "Distance from entry to take profit.",
+        "data_type": "float",
+        "required": true,
+        "example": 0.02
+      }
+    ],
+    "outputs": [
+      {
+        "name": "risk_reward_ratio",
+        "description": "Calculated ratio of profit distance to stop distance.",
+        "data_type": "float",
+        "required": true,
+        "example": null
+      }
+    ],
+    "dependencies": [],
+    "examples": [
+      {
+        "input": {
+          "stop_distance": 0.01,
+          "profit_distance": 0.02
+        },
+        "output": 2.0
+      }
+    ],
+    "tags": [
+      "risk_management",
+      "risk_reward"
+    ]
+  },
+  "skills.risk_management.stop_loss": {
+    "name": "skills.risk_management.stop_loss",
+    "description": "Calculate a stop loss level based on entry price and volatility.",
+    "version": "1.0.0",
+    "category": "risk_management",
+    "inputs": [
+      {
+        "name": "entry_price",
+        "description": "Entry price for the trade.",
+        "data_type": "float",
+        "required": true,
+        "example": 1.2
+      },
+      {
+        "name": "volatility",
+        "description": "Estimated market volatility.",
+        "data_type": "float",
+        "required": true,
+        "example": 0.005
+      },
+      {
+        "name": "multiplier",
+        "description": "Volatility multiplier for stop placement.",
+        "data_type": "float",
+        "required": false,
+        "example": 1.5
+      }
+    ],
+    "outputs": [
+      {
+        "name": "stop_loss_price",
+        "description": "Calculated stop loss price level.",
+        "data_type": "float",
+        "required": true,
+        "example": null
+      }
+    ],
+    "dependencies": [],
+    "examples": [
+      {
+        "input": {
+          "entry_price": 1.2,
+          "volatility": 0.005
+        },
+        "output": 1.1925
+      }
+    ],
+    "tags": [
+      "risk_management",
+      "stop_loss"
+    ]
+  },
+  "skills.risk_management.take_profit": {
+    "name": "skills.risk_management.take_profit",
+    "description": "Calculate a take profit target based on risk distance and reward ratio.",
+    "version": "1.0.0",
+    "category": "risk_management",
+    "inputs": [
+      {
+        "name": "entry_price",
+        "description": "Entry price for the trade.",
+        "data_type": "float",
+        "required": true,
+        "example": 1.2
+      },
+      {
+        "name": "risk_distance",
+        "description": "Distance from entry to stop loss.",
+        "data_type": "float",
+        "required": true,
+        "example": 0.01
+      },
+      {
+        "name": "reward_ratio",
+        "description": "Desired reward-to-risk ratio.",
+        "data_type": "float",
+        "required": false,
+        "example": 2.0
+      }
+    ],
+    "outputs": [
+      {
+        "name": "take_profit_price",
+        "description": "Calculated take profit price level.",
+        "data_type": "float",
+        "required": true,
+        "example": null
+      }
+    ],
+    "dependencies": [],
+    "examples": [
+      {
+        "input": {
+          "entry_price": 1.2,
+          "risk_distance": 0.01,
+          "reward_ratio": 2.0
+        },
+        "output": 1.22
+      }
+    ],
+    "tags": [
+      "risk_management",
+      "take_profit"
+    ]
+  },
+  "skills.signal_engine.bos": {
+    "name": "skills.signal_engine.bos",
+    "description": "Detect breaks of market structure from highs and lows to classify trend direction.",
+    "version": "1.0.0",
+    "category": "signal_engine",
+    "inputs": [
+      {
+        "name": "highs",
+        "description": "Sequence of recent high prices.",
+        "data_type": "List[float]",
+        "required": true,
+        "example": [
+          1.2,
+          1.25,
+          1.3
+        ]
+      },
+      {
+        "name": "lows",
+        "description": "Sequence of recent low prices.",
+        "data_type": "List[float]",
+        "required": true,
+        "example": [
+          1.1,
+          1.15,
+          1.18
+        ]
+      }
+    ],
+    "outputs": [
+      {
+        "name": "signal",
+        "description": "Structure break signal: bullish, bearish, or hold.",
+        "data_type": "str",
+        "required": true,
+        "example": null
+      }
+    ],
+    "dependencies": [],
+    "examples": [
+      {
+        "input": {
+          "highs": [
+            1.2,
+            1.3
+          ],
+          "lows": [
+            1.1,
+            1.18
+          ]
+        },
+        "output": "bullish"
+      }
+    ],
+    "tags": [
+      "signal_engine",
+      "structure_break"
+    ]
+  },
+  "skills.signal_engine.breakout": {
+    "name": "skills.signal_engine.breakout",
+    "description": "Detect breakout signals when price moves beyond a recent high or low.",
+    "version": "1.0.0",
+    "category": "signal_engine",
+    "inputs": [
+      {
+        "name": "prices",
+        "description": "Price history for breakout detection.",
+        "data_type": "List[float]",
+        "required": true,
+        "example": [
+          1.0,
+          1.01,
+          1.02,
+          1.03
+        ]
+      },
+      {
+        "name": "lookback",
+        "description": "Lookback window for breakout detection.",
+        "data_type": "int",
+        "required": false,
+        "example": 20
+      }
+    ],
+    "outputs": [
+      {
+        "name": "signal",
+        "description": "Breakout signal: buy, sell, or hold.",
+        "data_type": "str",
+        "required": true,
+        "example": null
+      }
+    ],
+    "dependencies": [],
+    "examples": [
+      {
+        "input": {
+          "prices": [
+            1.0,
+            1.1,
+            1.2,
+            1.3
+          ],
+          "lookback": 3
+        },
+        "output": "buy"
+      }
+    ],
+    "tags": [
+      "signal_engine",
+      "breakout"
+    ]
+  },
+  "skills.signal_engine.ema_cross": {
+    "name": "skills.signal_engine.ema_cross",
+    "description": "Generate EMA values and detect EMA crossover signals.",
+    "version": "1.0.0",
+    "category": "signal_engine",
+    "inputs": [
+      {
+        "name": "prices",
+        "description": "Historical price series for EMA calculation.",
+        "data_type": "List[float]",
+        "required": true,
+        "example": [
+          1.0,
+          1.01,
+          1.02,
+          1.03
+        ]
+      },
+      {
+        "name": "period",
+        "description": "EMA lookback period.",
+        "data_type": "int",
+        "required": true,
+        "example": 14
+      }
+    ],
+    "outputs": [
+      {
+        "name": "ema_values",
+        "description": "Calculated EMA values.",
+        "data_type": "List[float]",
+        "required": true,
+        "example": [
+          1.0,
+          1.01,
+          1.02,
+          1.03
+        ]
+      },
+      {
+        "name": "signal",
+        "description": "Signal output from the EMA crossover rule.",
+        "data_type": "str",
+        "required": true,
+        "example": "buy"
+      }
+    ],
+    "dependencies": [],
+    "examples": [
+      {
+        "input": {
+          "prices": [
+            1.0,
+            1.01,
+            1.02,
+            1.03
+          ],
+          "period": 3
+        },
+        "output": "buy"
+      }
+    ],
+    "tags": [
+      "signal_engine",
+      "ema",
+      "trend"
+    ]
+  }
+}

@@ -1,0 +1,26 @@
+diff --git a/es/BasicLayout.less b/es/BasicLayout.less
+index 548446df69ce8dc87a4233c98b156f401c00c702..7ee5bddc318d8f37f80bc31ba004364eb572db51 100644
+--- a/es/BasicLayout.less
++++ b/es/BasicLayout.less
+@@ -6,7 +6,7 @@
+ 
+ .@{basicLayout-prefix-cls} {
+ 
+-  &:not('.ant-pro-basicLayout-mobile') {
++  &:not(.ant-pro-basicLayout-mobile) {
+     ::-webkit-scrollbar {
+       width: 6px;
+       height: 6px;
+diff --git a/lib/BasicLayout.less b/lib/BasicLayout.less
+index 548446df69ce8dc87a4233c98b156f401c00c702..7ee5bddc318d8f37f80bc31ba004364eb572db51 100644
+--- a/lib/BasicLayout.less
++++ b/lib/BasicLayout.less
+@@ -6,7 +6,7 @@
+ 
+ .@{basicLayout-prefix-cls} {
+ 
+-  &:not('.ant-pro-basicLayout-mobile') {
++  &:not(.ant-pro-basicLayout-mobile) {
+     ::-webkit-scrollbar {
+       width: 6px;
+       height: 6px;
