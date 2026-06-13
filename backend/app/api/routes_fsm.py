@@ -3,16 +3,20 @@ from __future__ import annotations
 from fastapi import APIRouter
 
 from app.core.config import get_settings
+from app.core.models import RobotStatus
 from app.core.runtime import (
+    capital_engine,
     execution_agent,
     fsm_brain,
     get_or_create_robot_state,
     hedge_engine,
     market_agent,
+    no_trade_guard,
     risk_guard,
     save_robot_state,
     state_store,
 )
+from backend.app.skills.market_analysis import detect_regime
 from hooks.schemas import HookContext
 from app.core.runtime import evolution_agent
 from app.strategy.grid_math import calculate_grid
@@ -26,6 +30,30 @@ def tick():
     state = get_or_create_robot_state()
     tick_data = market_agent.fetch_tick(state.symbol)
     independent_ok = market_agent.validate_independent_source(tick_data)
+    market_state = {"tick": tick_data}
+
+    no_trade_decision = no_trade_guard.evaluate(state, market_state)
+    if not no_trade_decision.allowed:
+        state.status = RobotStatus.STOPPED
+        state.fsm_state = fsm_brain.next_state(state, no_trade_decision, has_cycle=None, surplus_active=False)
+        save_robot_state(state)
+        return {
+            "state": state,
+            "tick": tick_data,
+            "grid": None,
+            "risk": no_trade_decision,
+            "capital": None,
+            "executed_orders": [],
+            "cycle": None,
+        }
+
+    ohlcv_data = market_agent.fetch_ohlcv(state.symbol, num_candles=20)
+    regime_result = detect_regime(ohlcv_data)
+    current_regime = str(regime_result.get("regime", "REGIME_TRANSITION"))
+    current_atr = float(regime_result.get("volatility", {}).get("atr", 0.00001))
+    stop_distance = max(current_atr / settings.tick_size, 10.0)
+
+    capital_sizing = capital_engine.size_position(state, {"tick": tick_data, "stop_distance": stop_distance, "regime": current_regime})
 
     # Run before-signal hooks
     try:
@@ -146,4 +174,12 @@ def tick():
     state.fsm_state = fsm_brain.next_state(state, risk, has_cycle=cycle is not None, surplus_active=bool(executed and cycle and cycle.surplus_side != "NONE"))
     state.last_step = grid.current_step
     save_robot_state(state)
-    return {"state": state, "tick": tick_data, "grid": grid, "risk": risk, "executed_orders": executed, "cycle": cycle}
+    return {
+        "state": state,
+        "tick": tick_data,
+        "grid": grid,
+        "risk": risk,
+        "capital": capital_sizing,
+        "executed_orders": executed,
+        "cycle": cycle,
+    }

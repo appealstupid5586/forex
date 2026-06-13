@@ -14,8 +14,11 @@ from app.skills.optimization_engine.gene_search import BacktestOptimizer
 from app.memory import MemoryManager
 from app.skills.shared.memory import list_winner_genes, promote_gene, remember_gene
 from app.identity.identity_manager import IdentityManager
+from backend.app.skills.capital_engine.adapter import capital_analysis
+from backend.app.skills.capital_engine.position_sizer import PositionSizer
 from backend.app.skills.execution_engine.order_router import ExecutionAdapterAgent
 from backend.app.skills.market_analysis.mock_market import MockMarketDataAgent
+from backend.app.skills.no_trade_engine.no_trade_guard import NoTradeGuardAgent
 from backend.app.skills.risk_engine.risk_guard import RiskGuardAgent
 from enterprise_graph import EnterpriseGraphManager
 
@@ -39,7 +42,9 @@ class WinnerGenesMemoryAgent:
 state_store = JsonStateStore(settings.storage_path)
 gene_store = GeneStore(settings.genes_path)
 market_agent = MockMarketDataAgent()
+no_trade_guard = NoTradeGuardAgent(settings)
 risk_guard = RiskGuardAgent(settings)
+capital_engine = PositionSizer(settings)
 fsm_brain = FsmBrainAgent()
 hedge_engine = HedgeEngine(settings.base_lot, settings.max_exposure_lots)
 execution_agent = ExecutionAdapterAgent(settings)
