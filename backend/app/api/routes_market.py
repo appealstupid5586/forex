@@ -63,8 +63,23 @@ class MarketOHLCVRequest(BaseModel):
     @classmethod
     def validate_timestamps(cls, values: "MarketOHLCVRequest") -> "MarketOHLCVRequest":
         timestamps = [item.timestamp for item in values.ohlcv if item.timestamp is not None]
-        if len(timestamps) != len(set(timestamps)):
+        if not timestamps:
+            return values
+
+        # use pandas to parse timestamps robustly (supports int epoch, iso strings, datetimes)
+        try:
+            parsed = pd.to_datetime(timestamps, utc=True, errors="raise")
+        except Exception as exc:  # pragma: no cover - parsing errors are rare in tests
+            raise ValueError(f"unable to parse ohlcv timestamps: {exc}")
+
+        # uniqueness check
+        if not parsed.is_unique:
             raise ValueError("ohlcv timestamps must be unique when provided")
+
+        # monotonic increasing check
+        if not parsed.is_monotonic_increasing:
+            raise ValueError("ohlcv timestamps must be monotonic increasing")
+
         return values
 
 

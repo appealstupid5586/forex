@@ -64,3 +64,32 @@ def test_validate_market_ohlcv_rejects_short_series():
     short_ohlcv = build_ohlcv([1.0, 1.001, 1.002])
     response = client.post("/api/v1/market/validate", json={"ohlcv": short_ohlcv})
     assert response.status_code == 422
+
+
+def test_validate_market_ohlcv_monotonic_timestamps_accepts():
+    base_ts = 1680000000
+    ohlcv = []
+    for i, price in enumerate([1.0 + i * 0.001 for i in range(10)]):
+        ts = base_ts + i
+        candle = build_ohlcv([price])[0]
+        candle["timestamp"] = ts
+        ohlcv.append(candle)
+
+    response = client.post("/api/v1/market/validate", json={"ohlcv": ohlcv})
+    assert response.status_code == 200
+    payload = response.json()
+    assert payload["valid"] is True
+
+
+def test_validate_market_ohlcv_monotonic_timestamps_rejects():
+    # timestamps not monotonic
+    ohlcv = []
+    prices = [1.0, 1.001, 1.002, 1.003, 1.004]
+    timestamps = [100, 101, 99, 102, 103]
+    for price, ts in zip(prices, timestamps):
+        candle = build_ohlcv([price])[0]
+        candle["timestamp"] = ts
+        ohlcv.append(candle)
+
+    response = client.post("/api/v1/market/validate", json={"ohlcv": ohlcv})
+    assert response.status_code == 422
