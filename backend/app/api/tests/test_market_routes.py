@@ -49,3 +49,18 @@ def test_detect_market_volatility():
     assert response.status_code == 200
     payload = response.json()
     assert payload["volatility_analysis"]["atr_state"] in {"high", "normal", "low"}
+
+
+def test_validate_market_ohlcv():
+    ohlcv = build_ohlcv([1.0 + i * 0.001 for i in range(10)])
+    response = client.post("/api/v1/market/validate", json={"ohlcv": ohlcv})
+    assert response.status_code == 200
+    payload = response.json()
+    assert payload["valid"] is True
+    assert payload["total_candles"] == 10
+
+
+def test_validate_market_ohlcv_rejects_short_series():
+    short_ohlcv = build_ohlcv([1.0, 1.001, 1.002])
+    response = client.post("/api/v1/market/validate", json={"ohlcv": short_ohlcv})
+    assert response.status_code == 422
