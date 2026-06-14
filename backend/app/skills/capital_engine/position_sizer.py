@@ -23,7 +23,8 @@ class PositionSizer:
         risk_multiple *= self._drawdown_scale(state)
         risk_multiple *= self._loss_streak_scale(state)
 
-        target_risk = max(0.0, min(1.5, risk_multiple))
+        policy = self._trade_policy_for_regime(regime)
+        target_risk = max(0.0, min(3.0, risk_multiple))
         position_size = self._estimate_position_size(state, market_state, target_risk)
 
         return {
@@ -31,18 +32,40 @@ class PositionSizer:
             "risk_multiple": round(risk_multiple, 4),
             "risk_size": round(target_risk, 4),
             "position_size": round(position_size, 6),
+            "allow_pyramiding": policy["allow_pyramiding"],
+            "allow_scale_in": policy["allow_scale_in"],
+            "allow_wider_trailing_stop": policy["allow_wider_trailing_stop"],
         }
 
     def _risk_multiple_for_regime(self, regime: str) -> float:
         if regime == "REGIME_STRONG_BULL":
-            return 1.5
+            return 3.0
         if regime == "REGIME_STRONG_BEAR":
-            return 1.5
+            return 3.0
         if regime == "REGIME_UPTREND":
             return 1.0
         if regime == "REGIME_DOWNTREND":
             return 1.0
         return 0.5
+
+    def _trade_policy_for_regime(self, regime: str) -> dict[str, bool]:
+        if regime == "REGIME_STRONG_BULL":
+            return {
+                "allow_pyramiding": True,
+                "allow_scale_in": True,
+                "allow_wider_trailing_stop": True,
+            }
+        if regime == "REGIME_STRONG_BEAR":
+            return {
+                "allow_pyramiding": False,
+                "allow_scale_in": True,
+                "allow_wider_trailing_stop": False,
+            }
+        return {
+            "allow_pyramiding": False,
+            "allow_scale_in": False,
+            "allow_wider_trailing_stop": False,
+        }
 
     def _drawdown_scale(self, state: Any) -> float:
         drawdown = float(getattr(state, "drawdown_pct", 0.0))
